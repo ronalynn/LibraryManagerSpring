@@ -5,9 +5,11 @@ import static org.hamcrest.Matchers.*;
 
 import com.librarymanagerspring.librarymanagerspring.model.Book;
 import com.librarymanagerspring.librarymanagerspring.repository.BookRepository;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Description;
 
 import java.util.List;
 
@@ -35,16 +37,17 @@ class LibrarymanagerspringApplicationTests {
 		bookTestTwo.setYear(2021L);
 		bookTestTwo.setPages(100L);
 		bookRepository.save(bookTestTwo);
-		assertNotNull(bookRepository.findById(100L).get());
+		assertNotNull(bookRepository.findById(101L).get());
 
 		Book bookTestThree = new Book();
-		bookTestThree.setId(102L);
+		bookTestThree.setId(1022L);
 		bookTestThree.setTitle("Unit Testing Delete Book");
 		bookTestThree.setAuthor("Ronalyn Nanong");
 		bookTestThree.setYear(2021L);
 		bookTestThree.setPages(101L);
 		bookRepository.save(bookTestThree);
-		assertNotNull(bookRepository.findById(101L).get());
+		assertNotNull(bookRepository.findById(1022L).get());
+		//assertEquals(3, bookRepository.findAll().size());
 	}
 
 	@Test
@@ -54,6 +57,7 @@ class LibrarymanagerspringApplicationTests {
 	}
 
 	@Test
+	//@Description("hello")
 	public void testGetBookById () {
 		Book book = bookRepository.findById(100L).get();
 		assertEquals("A Book About Unit Testing", bookRepository.findById(100L).get().getTitle());
@@ -70,8 +74,8 @@ class LibrarymanagerspringApplicationTests {
 
 	@Test
 	public void testDelete(){
-		bookRepository.deleteById(102L);
-		assertFalse(bookRepository.existsById(102L));
+		bookRepository.deleteById(1022L);
+		assertFalse(bookRepository.existsById(1022L));
 	}
 
 }

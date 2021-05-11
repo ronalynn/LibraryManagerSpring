@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
+
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Data
