@@ -1,8 +1,8 @@
-package com.librarymanagerspring.librarymanagerspring.service;
+package com.librarymanagerspring.LibraryManagerSpring.service;
 
-import com.librarymanagerspring.librarymanagerspring.exception.BookNotFoundException;
-import com.librarymanagerspring.librarymanagerspring.model.Book;
-import com.librarymanagerspring.librarymanagerspring.repository.BookRepository;
+import com.librarymanagerspring.LibraryManagerSpring.exception.BookNotFoundException;
+import com.librarymanagerspring.LibraryManagerSpring.model.Book;
+import com.librarymanagerspring.LibraryManagerSpring.repository.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,12 +18,12 @@ public class BookService {
         this.bookRepository = bookRepository;
     }
 
-    public List<Book> getBooks() {
-        return bookRepository.findAll();
+    public Book getBookById(Long id) {
+        return bookRepository.findById(id).orElseThrow(() -> new BookNotFoundException("book cannot be found"));
     }
 
-    public Book getBook(Long id) {
-        return bookRepository.findById(id).orElseThrow(() -> new BookNotFoundException("book cannot be found"));
+    public List<Book> getBooks() {
+        return bookRepository.findAll();
     }
 
     public Book addBook(Book book){

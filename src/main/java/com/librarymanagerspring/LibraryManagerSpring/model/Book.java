@@ -1,6 +1,5 @@
-package com.librarymanagerspring.librarymanagerspring.model;
+package com.librarymanagerspring.LibraryManagerSpring.model;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

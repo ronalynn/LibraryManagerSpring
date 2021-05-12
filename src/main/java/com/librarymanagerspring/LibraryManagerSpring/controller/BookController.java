@@ -1,7 +1,7 @@
-package com.librarymanagerspring.librarymanagerspring.controller;
+package com.librarymanagerspring.LibraryManagerSpring.controller;
 
-import com.librarymanagerspring.librarymanagerspring.model.Book;
-import com.librarymanagerspring.librarymanagerspring.service.BookService;
+import com.librarymanagerspring.LibraryManagerSpring.model.Book;
+import com.librarymanagerspring.LibraryManagerSpring.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,8 +29,8 @@ public class BookController {
 
     //Get single book
     @GetMapping("/{id}")
-    public ResponseEntity<Book> getBook(@PathVariable("id") Long id){
-        Book theBook = bookService.getBook(id);
+    public ResponseEntity<Book> getBookById(@PathVariable("id") Long id){
+        Book theBook = bookService.getBookById(id);
         return new ResponseEntity<>(theBook, HttpStatus.OK);
     }
 
