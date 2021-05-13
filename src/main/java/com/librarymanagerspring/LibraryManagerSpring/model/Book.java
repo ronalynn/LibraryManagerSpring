@@ -1,10 +1,7 @@
 package com.librarymanagerspring.LibraryManagerSpring.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -16,6 +13,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @Table(name = "book")
 @Entity
+@ToString
 public class Book implements Serializable {
 
     @Id

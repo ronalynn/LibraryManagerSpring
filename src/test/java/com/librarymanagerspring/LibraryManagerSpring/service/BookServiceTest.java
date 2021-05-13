@@ -2,7 +2,6 @@ package com.librarymanagerspring.LibraryManagerSpring.service;
 
 import com.librarymanagerspring.LibraryManagerSpring.model.Book;
 import com.librarymanagerspring.LibraryManagerSpring.repository.BookRepository;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +14,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.*;
 
 @SpringBootTest
 class BookServiceTest {
@@ -26,6 +25,7 @@ class BookServiceTest {
     //Mock implementation of BookRepository
     @MockBean
     private BookRepository repository;
+
 
     @Test
     @DisplayName("Test getBookById()")
@@ -44,7 +44,7 @@ class BookServiceTest {
     @DisplayName("Test getBooks()")
     void testGetBooks(){
         Book bookOne = new Book(1L, "getBooks() test", "Ronalyn", 2021L, 123L);
-        Book bookTwo = new Book(2L, "should error", "Ronalyn", 1234L, 123L);
+        Book bookTwo = new Book(2L, "Another Book", "Ronalyn", 1234L, 123L);
         doReturn(Arrays.asList(bookOne, bookTwo)).when(repository).findAll();
 
         List<Book> books = service.getBooks();
@@ -63,6 +63,14 @@ class BookServiceTest {
 
         assertNotNull(returnedBook, "Book should not be null");
         assertEquals(1, returnedBook.getId());
+        assertNotEquals(2, returnedBook.getId());
     }
 
+    @Test
+    void testDelete(){
+        Long bookId = 1L;
+        service.deleteBook(bookId);
+        service.deleteBook(bookId);
+        verify(repository, times(2)).deleteById(bookId);
+    }
 }
