@@ -33,11 +33,11 @@ class BookServiceTest {
         Book book = new Book(1L, "getBookById() test", "Ronalyn", 2021L, 123L);
         doReturn(Optional.of(book)).when(repository).findById(1L);
 
-         Book returnedBook = service.getBookById(1L);
+        Book returnedBook = service.getBookById(1L);
 
-         assertNotNull(returnedBook);
-         assertEquals(book, returnedBook);
-         assertNotEquals(2, returnedBook.getId());
+        assertNotNull(returnedBook);
+        assertEquals(book, returnedBook);
+        assertNotEquals(2, returnedBook.getId());
     }
 
     @Test

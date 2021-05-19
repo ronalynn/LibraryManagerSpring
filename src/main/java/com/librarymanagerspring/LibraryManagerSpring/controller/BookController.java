@@ -3,55 +3,57 @@ package com.librarymanagerspring.LibraryManagerSpring.controller;
 import com.librarymanagerspring.LibraryManagerSpring.model.Book;
 import com.librarymanagerspring.LibraryManagerSpring.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.*;
 
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
-@RequestMapping("/api/books")
+@RequestMapping("/api")
 public class BookController {
 
-    private final BookService bookService;
-
     @Autowired
-    public BookController(BookService bookService) {
-        this.bookService = bookService;
+    private BookService bookService;
+
+    @GetMapping("/books")
+    public List<Book> getAllBooks(){
+        return bookService.getBooks();
     }
 
-    //Get all books
-    @GetMapping
-    public ResponseEntity<List<Book>> getBooks(){
-        List<Book> allBooks = bookService.getBooks();
-        return new ResponseEntity<>(allBooks, HttpStatus.OK);
+    @GetMapping("/books/{id}")
+    public ResponseEntity<Book> getBookById(@PathVariable Long id){
+        Book book = bookService.getBookById(id);
+        return ResponseEntity.ok(book);
     }
 
-    //Get single book
-    @GetMapping("/{id}")
-    public ResponseEntity<Book> getBookById(@PathVariable("id") Long id){
-        Book theBook = bookService.getBookById(id);
-        return new ResponseEntity<>(theBook, HttpStatus.OK);
+    @PostMapping("/books")
+    public Book addBook(@RequestBody Book book){
+        return bookService.addBook(book);
     }
 
-    //Add new book
-    @PostMapping
-    public ResponseEntity<Book> addBook(@RequestBody Book book){
-        Book theBook = bookService.addBook(book);
-        return new ResponseEntity<>(theBook, HttpStatus.OK);
+    @PutMapping("/books/{id}")
+    public ResponseEntity<Book> updateBook(@PathVariable Long id, @RequestBody Book bookDetails){
+        Book book = bookService.getBookById(id);
+
+        book.setTitle(bookDetails.getTitle());
+        book.setAuthor(bookDetails.getAuthor());
+        book.setYear(bookDetails.getYear());
+        book.setPages(bookDetails.getPages());
+
+        Book editBook = bookService.addBook(book);
+
+        return ResponseEntity.ok(editBook);
     }
 
-    //Update existing book
-    @PutMapping
-    public ResponseEntity<Book> updateBook(@RequestBody Book book){
-        Book theBook = bookService.addBook(book); //if book doesnt exist, create a new book
-        return new ResponseEntity<>(theBook, HttpStatus.OK);
-    }
+    @DeleteMapping("/books/{id}")
+    public ResponseEntity<Map<String, Boolean>> deleteBook(@PathVariable Long id){
+        bookService.getBookById(id);
 
-    //Delete a book
-    @DeleteMapping("/{id}")
-    public void deleteBook(@PathVariable("id") Long id){
         bookService.deleteBook(id);
+        Map<String, Boolean> response = new HashMap<>();
+        response.put("deleted", Boolean.TRUE);
+        return ResponseEntity.ok(response);
     }
 
 }
