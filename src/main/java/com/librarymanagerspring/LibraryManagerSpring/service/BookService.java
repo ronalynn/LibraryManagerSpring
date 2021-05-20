@@ -19,7 +19,7 @@ public class BookService {
     }
 
     public Book getBookById(Long id) {
-        return bookRepository.findById(id).orElseThrow(() -> new BookNotFoundException("book cannot be found"));
+        return bookRepository.findById(id).orElseThrow(() -> new BookNotFoundException("book with id: " + id + " cannot be found." ));
     }
 
     public List<Book> getBooks() {

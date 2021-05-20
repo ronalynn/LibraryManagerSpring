@@ -12,16 +12,24 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "book")
-@Entity
 @ToString
+@Entity
 public class Book implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(name = "title")
     private String title;
+
+    @Column(name = "author")
     private String author;
+
+    @Column(name = "year")
     private Long year;
+
+    @Column(name = "pages")
     private Long pages;
 
 }
