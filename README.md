@@ -1,3 +1,4 @@
+Test§
 # LibraryManagerSpring
 A simple spring project for library management. Provides functionality for [LibraryManagerUI](https://github.com/ronalynn/LibraryManagerUi).
 
