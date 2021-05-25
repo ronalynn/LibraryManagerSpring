@@ -2,75 +2,94 @@ package com.librarymanagerspring.LibraryManagerSpring.service;
 
 import com.librarymanagerspring.LibraryManagerSpring.model.Book;
 import com.librarymanagerspring.LibraryManagerSpring.repository.BookRepository;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.junit4.SpringRunner;
 
+import javax.swing.text.html.Option;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 
-@SpringBootTest
+@ExtendWith(MockitoExtension.class)
 class BookServiceTest {
+    @Mock
+    private BookRepository bookRepository;
 
     @Autowired
-    private BookService service;
+    @InjectMocks
+    private BookService bookService;
+    private Book book1;
+    private Book book2;
+    List<Book> bookList;
 
-    //Mock implementation of BookRepository
-    @MockBean
-    private BookRepository repository;
+    @BeforeEach
+    public void setUp(){
+        bookList = new ArrayList<>();
+        book1 = new Book(1L, "Book One", "Author One", 1111L, 11L);
+        book2 = new Book(2L, "Book Two", "Author Two", 2222L, 22L);
+        bookList.add(book1);
+        bookList.add(book2);
+
+    }
+
+    @AfterEach
+    public void tearDown() {
+        book1 = book2 = null;
+        bookList = null;
+    }
 
 
     @Test
-    @DisplayName("Test getBookById()")
     void testGetBookById(){
-        Book book = new Book(1L, "getBookById() test", "Ronalyn", 2021L, 123L);
-        doReturn(Optional.of(book)).when(repository).findById(1L);
-
-        Book returnedBook = service.getBookById(1L);
-
-        assertNotNull(returnedBook);
-        assertEquals(book, returnedBook);
-        assertNotEquals(2, returnedBook.getId());
+        Mockito.when(bookRepository.findById(1L)).thenReturn(Optional.ofNullable(book1));
+        assertThat(bookService.getBookById(book1.getId())).isEqualTo(book1);
     }
 
     @Test
-    @DisplayName("Test getBooks()")
     void testGetBooks(){
-        Book bookOne = new Book(1L, "getBooks() test", "Ronalyn", 2021L, 123L);
-        Book bookTwo = new Book(2L, "Another Book", "Ronalyn", 1234L, 123L);
-        doReturn(Arrays.asList(bookOne, bookTwo)).when(repository).findAll();
+        bookRepository.save(book1);
 
-        List<Book> books = service.getBooks();
+        when(bookRepository.findAll()).thenReturn(bookList);
 
-        assertEquals(2, books.size(), "should return 2 books");
-        assertNotEquals(3, books.size(), "should return 2 books");
+        List<Book> bookList1 = bookService.getBooks();
+
+        assertEquals(bookList1, bookList);
+
+        verify(bookRepository, times(1)).save(book1);
+        verify(bookRepository,times(1)).findAll();
     }
 
     @Test
-    @DisplayName("Test addBook()")
     void testAddBook(){
-        Book book = new Book(1L, "addBook() test", "Ronalyn", 2021L, 123L);
-        doReturn(book).when(repository).save(any());
-
-        Book returnedBook = service.addBook(book);
-
-        assertNotNull(returnedBook, "Book should not be null");
-        assertEquals(1, returnedBook.getId());
-        assertNotEquals(2, returnedBook.getId());
+        when(bookRepository.save(any())).thenReturn(book1);
+        bookService.addBook(book1);
+        verify(bookRepository, times(1)).save(any());
     }
 
     @Test
     void testDelete(){
-        Long bookId = 1L;
-        service.deleteBook(bookId);
-        service.deleteBook(bookId);
-        verify(repository, times(2)).deleteById(bookId);
+        Long book1Id = 1L;
+        bookService.deleteBook(book1.getId());
+        verify(bookRepository,times(1)).deleteById(book1Id);
     }
 }
